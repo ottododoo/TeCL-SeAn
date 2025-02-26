@@ -1,10 +1,8 @@
-# app.py
-
 import streamlit as st
 from transformers import pipeline
 
-# Load the emotion classification pipeline from Hugging Face (model trained on emotions)
-emotion_pipeline = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base")
+# Load the emotion classification pipeline using a free model
+emotion_pipeline = pipeline("text-classification", model="bhadresh-savani/distilbert-base-uncased-emotion")
 
 # Define colors and emojis for different emotions
 emotion_colors = {
@@ -37,7 +35,7 @@ text_input = st.text_area("Enter Text", "I love this product! It's amazing.")
 # Run analysis on the input text
 if st.button('Analyze Emotion and Sentiment'):
     # Get emotion classification result
-    emotion_result = emotion_pipeline(text_input)
+    emotion_result = emotion_pipeline(text_input, truncation=True)
     
     # Extract emotion and score
     emotion_label = emotion_result[0]['label'].lower()
@@ -58,17 +56,14 @@ if st.button('Analyze Emotion and Sentiment'):
     st.write(f"Confidence Score: {confidence_score:.2f}")
 
     # Add explanation based on detected emotion
-    if emotion_label == "joy":
-        st.write("You're feeling joyful or happy! 😊")
-    elif emotion_label == "anger":
-        st.write("It seems like you're feeling angry or frustrated! 😡")
-    elif emotion_label == "fear":
-        st.write("You're feeling fearful or anxious! 😱")
-    elif emotion_label == "sadness":
-        st.write("You're feeling sad or upset! 😢")
-    elif emotion_label == "surprise":
-        st.write("You're feeling surprised or amazed! 😲")
-    elif emotion_label == "disgust":
-        st.write("You're feeling disgusted or repelled! 🤢")
-    else:
-        st.write("You're feeling neutral or indifferent. 😐")
+    emotion_messages = {
+        "joy": "You're feeling joyful or happy! 😊",
+        "anger": "It seems like you're feeling angry or frustrated! 😡",
+        "fear": "You're feeling fearful or anxious! 😱",
+        "sadness": "You're feeling sad or upset! 😢",
+        "surprise": "You're feeling surprised or amazed! 😲",
+        "disgust": "You're feeling disgusted or repelled! 🤢",
+        "neutral": "You're feeling neutral or indifferent. 😐"
+    }
+
+    st.write(emotion_messages.get(emotion_label, "Emotion not recognized. 🤔"))
