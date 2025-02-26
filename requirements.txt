@@ -1,3 +1,3 @@
-streamlit
-transformers
-torch
+Transformers version: 4.41.2
+Streamlit version: 1.35.0
+Torch version: 2.3.1
